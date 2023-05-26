@@ -6,7 +6,7 @@ class MyNet(torch.nn.Module):
     def __init__(self):
         # ネットワークの定義
         super(MyNet, self).__init__()
-        self.fc1 = torch.nn.Linear(28*28, 1000)
+        self.fc1 = torch.nn.Linear(28 * 28, 1000)
         self.fc2 = torch.nn.Linear(1000, 10)
         
     # 順伝搬

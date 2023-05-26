@@ -13,39 +13,39 @@ import networks
 def load_MNIST(batch=128, intensity=1.0):
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST('./data',
-                        train = True,
-                        download = True,
-                        transform = transforms.Compose([
-                            transforms.ToTensor(),
-                            transforms.Lambda(lambda x: x * intensity)
-                        ])),
-        batch_size = batch,
-        shuffle = True)
+                       train=True,
+                       download=True,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           transforms.Lambda(lambda x: x * intensity)
+                       ])),
+        batch_size=batch,
+        shuffle=True)
 
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST('./data',
-                        train = False,
-                        transform = transforms.Compose([
-                            transforms.ToTensor(),
-                            transforms.Lambda(lambda x: x * intensity)
-                        ])),
-        batch_size = batch,
-        shuffle = True)
+                       train=False,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           transforms.Lambda(lambda x: x * intensity)
+                       ])),
+        batch_size=batch,
+        shuffle=True)
     
-    return{'train': train_loader, 'test': test_loader}
+    return {'train': train_loader, 'test': test_loader}
 
 # **********************************************
 # main
 # **********************************************
 def main():
     # 学習回数
-    epochs = 20
+    epochs = 5
     
     # 学習結果の保存用
     history = {
-        'train_loss':[],
-        'test_loss':[],
-        'test_acc':[],
+        'train_loss': [],
+        'test_loss': [],
+        'test_acc': [],
     }
     
     # ネットワークを構築
@@ -70,12 +70,12 @@ def main():
         loss = None
         # 学習開始
         net.train(True)
-        for i,(data, target) in enumerate(loaders['train']):
+        for i, (data, target) in enumerate(loaders['train']):
             # 学習部分
             # 全結合のみのネットワークでは入力を1次元に
             # print(data.shape)
             # torch.Size([128, 1, 28, 28])
-            data = data.view(-1, 28*28)
+            data = data.view(-1, 28 * 28)
             # print(data.shape)
             # torch.Size([128, 784])
             
@@ -86,8 +86,8 @@ def main():
             optimizer.step()
             
             if i % 10 == 0:
-                print('Training log: {} epoch ({} / 60000 train. data). Loss: {}'.format(epoch+1,
-                                                                                         (i+1)*128,
+                print('Training log: {} epoch ({} / 60000 train. data). Loss: {}'.format(epoch + 1,
+                                                                                         (i + 1) * 128,
                                                                                          loss.item())
                       )
         
@@ -111,7 +111,7 @@ def main():
         test_loss /= 10000
 
         print('Test loss (avg): {}, Accuracy: {}'.format(test_loss,
-                                                        correct / 10000))
+                                                         correct / 10000))
 
         history['test_loss'].append(test_loss)
         history['test_acc'].append(correct / 10000)
