@@ -12,7 +12,8 @@ import networks
 # NNISTをロードする関数
 def load_MNIST(batch=128, intensity=1.0):
     train_loader = DataLoader(
-        datasets.MNIST('../data/',
+        datasets.MNIST(
+            '../data/',
             train=True,
             download=True,
             transform=transforms.Compose([
@@ -23,7 +24,8 @@ def load_MNIST(batch=128, intensity=1.0):
         shuffle=True)
 
     test_loader = DataLoader(
-        datasets.MNIST('../data/',
+        datasets.MNIST(
+            '../data/',
             train=False,
             transform=transforms.Compose([
                 transforms.ToTensor(),
@@ -49,7 +51,7 @@ def main():
     model.to(device)
     # 誤差関数
     criterion = nn.CrossEntropyLoss()
-    #最適化器
+    # 最適化器
     optimizer = torch.optim.Adam(params=model.parameters())
     # MNISTのデータローダーを取得
     loaders = load_MNIST()
@@ -111,7 +113,7 @@ def main():
         test_loss /= data_num
         correct /= data_num
         # 1エポックあたりの誤差と正解率を表示
-        print('epoch{} Test loss (avg): {}, Accuracy: {}'.format(epoch+1, test_loss, correct))
+        print('epoch{} Test loss (avg): {}, Accuracy: {}'.format(epoch + 1, test_loss, correct))
 
         # 誤差と正解率を代入
         history['train_loss'].append(loss.item())
