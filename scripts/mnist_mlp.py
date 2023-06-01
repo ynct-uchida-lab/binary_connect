@@ -127,6 +127,7 @@ def main():
         # 1エポックあたりの誤差と正解率を表示
         print('epoch{} Train loss (avg): {}, Accuracy: {}'.format(epoch + 1, train_loss, train_correct))
         print('epoch{} Test loss (avg): {}, Accuracy: {}'.format(epoch + 1, test_loss, test_correct))
+        print(model.fc2.weight.data)
 
         # 誤差と正解率を代入
         history['train_loss'].append(train_loss)
