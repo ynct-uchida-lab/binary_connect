@@ -1,39 +1,9 @@
 # import modules
 import torch
 import torch.nn as nn
-import matplotlib.pyplot as plt
-
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision import transforms
 
 import networks
-
-# NNISTをロードする関数
-def load_MNIST(batch=5000, intensity=1.0):
-    train_loader = DataLoader(
-        datasets.MNIST(
-            '../data/',
-            train=True,
-            download=True,
-            transform=transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Lambda(lambda x: x * intensity)
-            ])),
-        batch_size=batch,
-        shuffle=True)
-
-    test_loader = DataLoader(
-        datasets.MNIST(
-            '../data/',
-            train=False,
-            transform=transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Lambda(lambda x: x * intensity)
-            ])),
-        batch_size=batch)
-    
-    return {'train': train_loader, 'test': test_loader}
+import functions
 
 # **********************************************
 # main
@@ -54,13 +24,13 @@ def main():
     # 最適化器
     optimizer = torch.optim.Adam(params=model.parameters())
     # MNISTのデータローダーを取得
-    loaders = load_MNIST()
+    loaders = functions.load_MNIST()
     
     # -------------------------------------
     # モデルの学習
     # -------------------------------------
     # 学習回数
-    epochs = 10
+    epochs = 5
     # 学習結果の保存用
     history = {
         'train_loss': [],
@@ -89,8 +59,7 @@ def main():
             # 誤差逆伝搬とパラメーターの更新
             optimizer.zero_grad()
             loss.backward()
-            model.fc1.weight.grad = model.fc1_bc.weight.grad
-            model.fc2.weight.grad = model.fc2_bc.weight.grad
+            model.set_grad()
             optimizer.step()
             # 正解数を求める
             outputs = torch.argmax(outputs, dim=1)
@@ -140,20 +109,8 @@ def main():
         history['test_loss'].append(test_loss)
         history['test_acc'].append(test_correct)
 
-    # 結果の出力と描画
-    plt.figure()
-    plt.plot(range(1, epochs + 1), history['train_loss'], label='train_loss')
-    plt.plot(range(1, epochs + 1), history['test_loss'], label='test_loss')
-    plt.xlabel('epoch')
-    plt.legend()
-    plt.savefig('../outputs/loss_bc.png')
-    
-    plt.figure()
-    plt.plot(range(1, epochs + 1), history['train_acc'], label='train_acc')
-    plt.plot(range(1, epochs + 1), history['test_acc'], label='test_acc')
-    plt.xlabel('epoch')
-    plt.legend()
-    plt.savefig('../outputs/acc_bc.png')
+    # 正答率,誤差のグラフを出力
+    functions.makefig(epochs, history)
     
 if __name__ == '__main__':
     main()

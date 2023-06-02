@@ -17,6 +17,14 @@ class MLPCls(torch.nn.Module):
         return x
     
 class BCCls(torch.nn.Module):
+    def set_grad(self):
+        self.fc1.weight.grad =  self.fc1_bc.weight.grad
+        self.fc2.weight.grad = self.fc2_bc.weight.grad
+        
+    def binarize(self):
+        self.fc1_bc.weight.data = torch.sign(self.fc1.weight.data)
+        self.fc2_bc.weight.data = torch.sign(self.fc2.weight.data)
+    
     def __init__(self):
         # ネットワークの定義
         super(BCCls, self).__init__()
@@ -28,8 +36,7 @@ class BCCls(torch.nn.Module):
         
     # 順伝搬
     def forward(self, x):
-        self.fc1_bc.weight.data = torch.sign(self.fc1.weight.data)
-        self.fc2_bc.weight.data = torch.sign(self.fc2.weight.data)
+        BCCls.binarize(self)
         x = self.fc1_bc(x)
         x = self.bc(x)
         x = torch.relu(x)
