@@ -18,7 +18,7 @@ class MLPCls(torch.nn.Module):
     
 class BCCls(torch.nn.Module):
     def set_grad(self):
-        self.fc1.weight.grad =  self.fc1_bc.weight.grad
+        self.fc1.weight.grad = self.fc1_bc.weight.grad
         self.fc2.weight.grad = self.fc2_bc.weight.grad
         
     def binarize(self):
