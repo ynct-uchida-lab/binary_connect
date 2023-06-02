@@ -1,13 +1,10 @@
 # # import modules
-import torch
-import torch.nn as nn
 import matplotlib.pyplot as plt
 
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision import transforms
 
-import networks
 # NNISTをロードする関数
 def load_MNIST(batch=5000, intensity=1.0):
     train_loader = DataLoader(
