@@ -1,39 +1,9 @@
 # import modules
 import torch
 import torch.nn as nn
-import matplotlib.pyplot as plt
-
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision import transforms
 
 import networks
-
-# NNISTをロードする関数
-def load_MNIST(batch=128, intensity=1.0):
-    train_loader = DataLoader(
-        datasets.MNIST(
-            '../data/',
-            train=True,
-            download=True,
-            transform=transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Lambda(lambda x: x * intensity)
-            ])),
-        batch_size=batch,
-        shuffle=True)
-
-    test_loader = DataLoader(
-        datasets.MNIST(
-            '../data/',
-            train=False,
-            transform=transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Lambda(lambda x: x * intensity)
-            ])),
-        batch_size=batch)
-    
-    return {'train': train_loader, 'test': test_loader}
+import functions
 
 # **********************************************
 # main
@@ -54,7 +24,7 @@ def main():
     # 最適化器
     optimizer = torch.optim.Adam(params=model.parameters())
     # MNISTのデータローダーを取得
-    loaders = load_MNIST()
+    loaders = functions.load_MNIST()
     
     # -------------------------------------
     # モデルの学習
@@ -63,6 +33,7 @@ def main():
     epochs = 5
     # 学習結果の保存用
     history = {
+        'epoch': [],
         'train_loss': [],
         'test_loss': [],
         'train_acc': [],
@@ -134,21 +105,10 @@ def main():
         history['train_acc'].append(train_correct)
         history['test_loss'].append(test_loss)
         history['test_acc'].append(test_correct)
+        history['epoch'].append(epoch + 1)
 
     # 結果の出力と描画
-    plt.figure()
-    plt.plot(range(1, epochs + 1), history['train_loss'], label='train_loss')
-    plt.plot(range(1, epochs + 1), history['test_loss'], label='test_loss')
-    plt.xlabel('epoch')
-    plt.legend()
-    plt.savefig('../outputs/loss.png')
-    
-    plt.figure()
-    plt.plot(range(1, epochs + 1), history['train_acc'], label='train_acc')
-    plt.plot(range(1, epochs + 1), history['test_acc'], label='test_acc')
-    plt.xlabel('epoch')
-    plt.legend()
-    plt.savefig('../outputs/acc.png')
+    functions.make_fig(history)
     
 if __name__ == '__main__':
     main()
