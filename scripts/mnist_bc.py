@@ -33,14 +33,14 @@ def main():
     epochs = 5
     # 学習結果の保存用
     history = {
-        'epochs': epochs,
+        'epoch': [],
         'train_loss': [],
         'test_loss': [],
         'train_acc': [],
         'test_acc': [],
     }
     # 学習，テスト用ループ
-    for epoch in range(history['epochs']):
+    for epoch in range(epochs):
         # 学習開始
         model.train()
         train_loss = 0
@@ -109,6 +109,7 @@ def main():
         history['train_acc'].append(train_correct)
         history['test_loss'].append(test_loss)
         history['test_acc'].append(test_correct)
+        history['epoch'].append(epoch + 1)
 
     # 正答率,誤差のグラフを出力
     functions.make_fig(history)

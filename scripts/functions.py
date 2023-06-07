@@ -33,17 +33,16 @@ def load_MNIST(batch=5000, intensity=1.0):
 
 # 結果の出力と描画
 def make_fig(history):
-    history['epochs'] += 1
     plt.figure()
-    plt.plot(range(1, history['epochs']), history['train_loss'], label='train_loss')
-    plt.plot(range(1, history['epochs']), history['test_loss'], label='test_loss')
+    plt.plot(history['epoch'], history['train_loss'], label='train_loss')
+    plt.plot(history['epoch'], history['test_loss'], label='test_loss')
     plt.xlabel('epoch')
     plt.legend()
     plt.savefig('../outputs/loss_bc.png')
     
     plt.figure()
-    plt.plot(range(1, history['epochs']), history['train_acc'], label='train_acc')
-    plt.plot(range(1, history['epochs']), history['test_acc'], label='test_acc')
+    plt.plot(history['epoch'], history['train_acc'], label='train_acc')
+    plt.plot(history['epoch'], history['test_acc'], label='test_acc')
     plt.xlabel('epoch')
     plt.legend()
     plt.savefig('../outputs/acc_bc.png')
