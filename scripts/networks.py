@@ -1,5 +1,6 @@
 # import modules
 import torch
+import copy
 
 class MLPCls(torch.nn.Module):
     def __init__(self):
@@ -23,8 +24,8 @@ class BCCls(torch.nn.Module):
         self.fc1 = torch.nn.Linear(28 * 28, 1000)
         self.bc = torch.nn.BatchNorm1d(1000)
         self.fc2 = torch.nn.Linear(1000, 10)
-        self.fc1_bc = torch.nn.Linear(28 * 28, 1000)
-        self.fc2_bc = torch.nn.Linear(1000, 10)
+        self.fc1_bc = copy.deepcopy(self.fc1)
+        self.fc2_bc = copy.deepcopy(self.fc2)
         
     # 順伝搬
     def forward(self, x):
