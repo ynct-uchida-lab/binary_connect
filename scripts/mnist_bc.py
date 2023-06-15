@@ -40,10 +40,10 @@ def main():
         'test_acc': [],
     }
     # 学習，テスト用ループ
-    for epoch in  range(epochs):
+    for epoch in range(epochs):
         losses = [0, 0]
         corrects = [0, 0]
-        data_nums = [0 , 0]
+        data_nums = [0, 0]
         accuracy = [0, 0]
         for i, mode in enumerate(['train', 'test']):
             if mode == 'train':
