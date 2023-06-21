@@ -47,10 +47,10 @@ def main():
         accuracy = [0, 0]
         for i, mode in enumerate(['train', 'test']):
             if mode == 'train':
-                # 学習開始
+                # モデルを学習モードにする
                 model.train()
             else:
-                # 学習のストップ
+                # モデルを推論モードにする
                 model.eval()
             for inputs, labels in loaders[mode]:
                 # 指定したdeviceに変数を変換
